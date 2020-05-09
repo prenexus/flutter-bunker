@@ -36,7 +36,7 @@ class BunkerGame extends Game {
   List<Saucer> saucers;
   List<Missile> missiles;
   List<Dropper> droppers;
-  List<Dropper> droppersLanded;
+  List<DropperLanded> droppersLanded;
   ScoreDisplay scoreDisplay;
   HomeView homeView;
   SaucerSpawner spawner;
@@ -45,6 +45,11 @@ class BunkerGame extends Game {
 
   double gunAngle = 45.0;
   int score = 0;
+  //How many landers do we have?
+  int landed = 0;
+  // After maxLanders trigger a march to the bunker
+  int maxLanders = 10;
+  bool landersMarch = false;
 
   Random rnd;
 
@@ -56,7 +61,7 @@ class BunkerGame extends Game {
     saucers = List<Saucer>();
     missiles = List<Missile>();
     droppers = List<Dropper>();
-    droppersLanded = List<Dropper>();
+    droppersLanded = List<DropperLanded>();
 
     resize(await Flame.util.initialDimensions());
     rnd = Random();
@@ -82,20 +87,21 @@ class BunkerGame extends Game {
     missiles.forEach((Missile missile) => missile.render(canvas));
     saucers.forEach((Saucer saucer) => saucer.render(canvas));
     droppers.forEach((Dropper dropper) => dropper.render(canvas));
-    droppersLanded.forEach((Dropper dropperLanded) => dropperLanded.render(canvas));
+    droppersLanded.forEach((DropperLanded dropperLanded) => dropperLanded.render(canvas));
   }
 
   void update(double t) {
     missiles.forEach((Missile missile) => missile.update(t, gunAngle));
     saucers.forEach((Saucer saucer) => saucer.update(t));
     droppers.forEach((Dropper dropper) => dropper.update(t));
-    droppersLanded.forEach((Dropper dropperLanded) => dropperLanded.update(t));
+    droppersLanded.forEach((DropperLanded dropperLanded) => dropperLanded.update(t));
 
     spawner.update(t);
     dropperSpawner.update(t);
 
     // Check if missile hit saucer?
     saucers.forEach((Saucer saucer) {
+
       missiles.forEach((Missile missile) {
         if (missile.missileRect.overlaps(saucer.saucerRect)) {
           missile.isDead = true;
@@ -105,14 +111,8 @@ class BunkerGame extends Game {
       });
     });
 
-    droppers.forEach((Dropper dropper) {
-      if (dropper.dropperRect.top > this.screenSize.height - this.tileSize *1.5 ) {
-        print ("Landed");
-        droppersLanded.add(DropperLanded(this, dropper.dropperRect.top, dropper.dropperRect.left));
-      }
-    });
 
-    //Remove offscreen saucers
+    //Remove offscreen elements
     saucers.removeWhere((Saucer saucer) => saucer.isOffScreen);
     missiles.removeWhere((Missile missile) => missile.isOffScreen);
     droppers.removeWhere((Dropper dropper) => dropper.isOffScreen);
@@ -167,19 +167,14 @@ class BunkerGame extends Game {
     double x = saucerToDrop.saucerRect.left ;
     double y = saucerToDrop.saucerRect.top;
 
-    //Dont spawn too close to the bunker
-    if (x < screenSize.height - tileSize * 2)
+    //Dont spawn too close to the bunker, or off screen
+      if ((x < tileSize * 4) || (x > screenSize.width - tileSize * 2))
     {
       // Do nothing
     }else {
       droppers.add(DropperBlue(this, x, y));
     }
   }
-
-  void spawnDropperLanded(double x){
-
-  }
-
 
   void onTapDown(TapDownDetails d) {
     spawnMissile();

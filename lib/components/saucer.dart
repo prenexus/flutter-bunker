@@ -16,7 +16,7 @@ class Saucer {
   double get speed => game.tileSize *3;
   double get dropRate => 1.0;
 
-  Saucer(this.game) {}
+  Saucer(this.game) ;
 
   void render(Canvas c) {
     if (isDead) {

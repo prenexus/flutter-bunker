@@ -18,7 +18,7 @@ class Dropper {
   // Slightly slower than the saucers
   double get speed => game.tileSize *2;
 
-  Dropper(this.game) {}
+  Dropper(this.game) ;
 
   void render(Canvas c) {
     if (isDead) {
@@ -26,7 +26,7 @@ class Dropper {
     }
     //Check height - open parachute or just render
     if (hasLanded){
-      //flyingSprite[flyingSpriteIndex.toInt()].renderRect(c, dropperRect.inflate(2));
+
     }
 
 
@@ -39,7 +39,8 @@ class Dropper {
 
   void update(double t) {
     if (dropperRect.top > game.screenSize.height - game.tileSize *1.5 ) {
-      hasLanded = true;
+      //      if (dropper.dropperRect.top >= this.screenSize.height - this.tileSize *1.5 ) {
+      spawnDropperLanded(dropperRect.left);
       isOffScreen = true;
       return;
     }else {
@@ -83,6 +84,14 @@ class Dropper {
 
   void explode() {
     isDead = true;
+  }
+
+
+  void spawnDropperLanded(double x){
+      game.landed++;
+      game.droppersLanded.add(DropperLanded(game, x, game.screenSize.height - game.tileSize*1.5));
+
+      if (game.landed == game.maxLanders) {game.landersMarch = true;}
   }
 
 }

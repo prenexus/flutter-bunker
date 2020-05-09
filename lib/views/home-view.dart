@@ -7,7 +7,7 @@ class HomeView {
   Rect titleRect;
   Sprite titleSprite;
 
-  HomeView(this.game) {}
+  HomeView(this.game) ;
 
   void render(Canvas c) {}
 

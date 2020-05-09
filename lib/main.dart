@@ -1,13 +1,14 @@
-// TODO: Alien dropships
-// TODO: Dropship ground collision
-// TODO: Fire gun on tap
-// TODO: Move gun on swipe
+
 // TODO: Switch gun
 // TODO: Mortar gun
-// TODO: Score card
 // TODO: Title card
 // TODO: High score card
-// TODO: Missiles look stupid flying - change it to a square / round bullet?
+// TODO: Fast moving saucers
+// TODO: Make red saucer drop more guys
+// TODO: Landed guys attach
+// TODO: Saucer in the cactus
+// TODO: SOUNDS!
+
 
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
@@ -31,6 +32,16 @@ void main() {
     'saucer/saucer-red.png',
     'saucer/saucer-blue.png',
     'saucer/saucer-blue-dead.png',
+    'sky/sky.png',
+    'bunker/bunker.png',
+    'saucer/saucer-red-dead.png',
+    'saucer/saucer-blue-2.png',
+    'saucer/saucer-blue-3.png',
+    'missile/spr_missile_half.png',
+    'missile/missile.png',
+    'dropper/dropper-blue.png',
+    'dropper/dropper-blue-parachute.png',
+
   ]);
 
 
