@@ -70,6 +70,7 @@ class Dropper {
     if (isDead) {
       //Play death animation / or drop if chute is shot?
       //dropperRect = saucerRect.translate(0, game.tileSize * 6 * t);
+      isOffScreen = true;
     }
 
     //Is the dropper off screen at the bottom?

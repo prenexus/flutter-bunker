@@ -10,6 +10,7 @@
 // TODO: SOUNDS!
 
 
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
@@ -45,15 +46,10 @@ void main() {
   ]);
 
 
-
+  //The tapper will fire
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;
   flameUtil.addGestureRecognizer(tapper);
-
- VerticalDragGestureRecognizer dragger = VerticalDragGestureRecognizer();
- dragger.onDown = game.onDrag;
- dragger.onUpdate = game.onDragUpdate;
- flameUtil.addGestureRecognizer(dragger);
 
   runApp(game.widget);
 

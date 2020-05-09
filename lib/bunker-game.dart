@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/gestures.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:gametest/components/background.dart';
@@ -26,7 +27,7 @@ import 'package:gametest/components/dropper-landed.dart';
 
 import 'dart:math';
 
-class BunkerGame extends Game {
+class BunkerGame extends Game with PanDetector {
   Size screenSize;
   double tileSize;
   Background background;
@@ -111,6 +112,15 @@ class BunkerGame extends Game {
       });
     });
 
+    droppers.forEach((Dropper dropper) {
+      missiles.forEach((Missile missile) {
+        if (missile.missileRect.overlaps(dropper.dropperRect)) {
+          missile.isDead = true;
+          if (!dropper.isDead){score = score + 5;}
+          dropper.explode();
+        }
+      });
+    });
 
     //Remove offscreen elements
     saucers.removeWhere((Saucer saucer) => saucer.isOffScreen);
@@ -183,8 +193,23 @@ class BunkerGame extends Game {
   void onDrag(DragDownDetails d){
   }
 
-  void onDragUpdate (DragUpdateDetails d){
-    gunAngle = gunAngle - d.primaryDelta;
+  @override
+  void onPanUpdate (DragUpdateDetails d){
+
+      print(d.delta.dx.toString());
+
+      if (d.delta.dx < -2)
+        {
+          print ("Switching to mortar");
+        }
+
+      if (d.delta.dx  > 2)
+        {
+          print ("Switching to missle");
+        }
+
+
+    gunAngle = gunAngle - (d.delta.dy );
     if (gunAngle > 90){
       gunAngle = 90.0;
     }
