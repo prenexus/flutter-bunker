@@ -1,20 +1,20 @@
 import 'package:gametest/bunker-game.dart';
-import 'package:gametest/components/saucer.dart';
+import 'package:gametest/components/dropper.dart';
 
-class SaucerSpawner {
+class DropperSpawner {
   final BunkerGame game;
 
   final int maxSpawnInterval = 3000;
   final int minSpawnInterval = 250;
   final int intervalChange = 3;
-  final int maxSaucersOnScreen = 3;
+  final int maxDroppersOnScreen = 1;
 
   int currentInterval;
   int nextSpawn;
 
-  SaucerSpawner(this.game) {
+  DropperSpawner(this.game) {
     start();
-    game.spawnSaucer();
+    game.spawnDropper();
   }
 
   void start() {
@@ -24,19 +24,19 @@ class SaucerSpawner {
   }
 
   void killAll() {
-    game.saucers.forEach((Saucer saucer) => saucer.isDead = true);
+    game.droppers.forEach((Dropper dropper) => dropper.isDead = true);
   }
 
   void update(double t) {
     int nowTimestamp = DateTime.now().millisecondsSinceEpoch;
 
-    int livingSaucers = 0;
-    game.saucers.forEach((Saucer saucer) {
-      if (!saucer.isDead) livingSaucers += 1;
+    int livingDroppers = 0;
+    game.droppers.forEach((Dropper dropper) {
+      if (!dropper.isDead) livingDroppers += 1;
     });
 
-    if (nowTimestamp >= nextSpawn && livingSaucers < maxSaucersOnScreen) {
-      game.spawnSaucer();
+    if (nowTimestamp >= nextSpawn && livingDroppers < maxDroppersOnScreen) {
+      game.spawnDropper();
       if (currentInterval > minSpawnInterval) {
         currentInterval -= intervalChange;
         currentInterval -= (currentInterval * .02).toInt();

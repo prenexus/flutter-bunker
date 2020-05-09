@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flame/sprite.dart';
-import 'package:gametest/box-game.dart';
+import 'package:gametest/bunker-game.dart';
 
 class HomeView {
-  final BoxGame game;
+  final BunkerGame game;
   Rect titleRect;
   Sprite titleSprite;
 

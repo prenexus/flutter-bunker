@@ -11,6 +11,8 @@ import 'package:gametest/components/bunker.dart';
 import 'package:gametest/components/saucer.dart';
 import 'package:gametest/components/saucer-blue.dart';
 import 'package:gametest/components/saucer-red.dart';
+
+import 'package:gametest/components/dropper.dart';
 import 'package:gametest/components/score-display.dart';
 import 'package:gametest/components/missile.dart';
 
@@ -18,10 +20,13 @@ import 'package:gametest/view.dart';
 import 'package:gametest/views/home-view.dart';
 
 import 'package:gametest/components/spawner.dart';
+import 'package:gametest/components/dropper-spawner.dart';
+import 'package:gametest/components/dropper-blue.dart';
+import 'package:gametest/components/dropper-landed.dart';
 
 import 'dart:math';
 
-class BoxGame extends Game {
+class BunkerGame extends Game {
   Size screenSize;
   double tileSize;
   Background background;
@@ -30,36 +35,41 @@ class BoxGame extends Game {
   Skybox skybox;
   List<Saucer> saucers;
   List<Missile> missiles;
+  List<Dropper> droppers;
+  List<Dropper> droppersLanded;
   ScoreDisplay scoreDisplay;
   HomeView homeView;
   SaucerSpawner spawner;
-  View activeView = View.home;
+  DropperSpawner dropperSpawner;
+  View activeView = View.playing;
 
   double gunAngle = 45.0;
   int score = 0;
 
   Random rnd;
 
-  BoxGame() {
+  BunkerGame() {
     initialise();
   }
 
   void initialise() async {
     saucers = List<Saucer>();
     missiles = List<Missile>();
-
+    droppers = List<Dropper>();
+    droppersLanded = List<Dropper>();
 
     resize(await Flame.util.initialDimensions());
     rnd = Random();
 
-    spawner = SaucerSpawner(this);
+    //Initialise all our classes
     scoreDisplay = ScoreDisplay(this);
+    spawner = SaucerSpawner(this);
+    dropperSpawner = DropperSpawner(this);
     skybox = Skybox(this);
     background = Background(this);
     bunker = Bunker(this);
     cactus = Cactus(this);
     homeView = HomeView(this);
-
   }
 
   void render(Canvas canvas) {
@@ -71,30 +81,43 @@ class BoxGame extends Game {
 
     missiles.forEach((Missile missile) => missile.render(canvas));
     saucers.forEach((Saucer saucer) => saucer.render(canvas));
+    droppers.forEach((Dropper dropper) => dropper.render(canvas));
+    droppersLanded.forEach((Dropper dropperLanded) => dropperLanded.render(canvas));
   }
 
   void update(double t) {
     missiles.forEach((Missile missile) => missile.update(t, gunAngle));
     saucers.forEach((Saucer saucer) => saucer.update(t));
+    droppers.forEach((Dropper dropper) => dropper.update(t));
+    droppersLanded.forEach((Dropper dropperLanded) => dropperLanded.update(t));
 
     spawner.update(t);
+    dropperSpawner.update(t);
 
     // Check if missile hit saucer?
     saucers.forEach((Saucer saucer) {
       missiles.forEach((Missile missile) {
         if (missile.missileRect.overlaps(saucer.saucerRect)) {
           missile.isDead = true;
-          score = score + 10;
+          if (!saucer.isDead){score = score + 10;}
           saucer.explode();
         }
       });
     });
 
+    droppers.forEach((Dropper dropper) {
+      if (dropper.dropperRect.top > this.screenSize.height - this.tileSize *1.5 ) {
+        print ("Landed");
+        droppersLanded.add(DropperLanded(this, dropper.dropperRect.top, dropper.dropperRect.left));
+      }
+    });
+
     //Remove offscreen saucers
     saucers.removeWhere((Saucer saucer) => saucer.isOffScreen);
     missiles.removeWhere((Missile missile) => missile.isOffScreen);
+    droppers.removeWhere((Dropper dropper) => dropper.isOffScreen);
 
-    if (activeView == View.home) scoreDisplay.update(t);
+    if (activeView == View.playing) scoreDisplay.update(t);
   }
 
   void resize(Size size) {
@@ -106,13 +129,16 @@ class BoxGame extends Game {
   void spawnMissile(){
     missiles.add(Missile(this));
     if (score > 0){ score--;}
-    print ("Score : " + score.toString());
   }
 
   void spawnSaucer(){
     double y = rnd.nextDouble() * (screenSize.height - tileSize);
     double x = screenSize.width + tileSize;
 
+    // If saucer is too low.... spawn it at the bottom
+    if (y > screenSize.height - tileSize*3.5) {y = screenSize.height - tileSize*3.5;}
+
+    // Which sort of saucer are we going to spawn?
     switch (rnd.nextInt(5)) {
       case 0:
         saucers.add(SaucerBlue(this, x, y));
@@ -131,6 +157,29 @@ class BoxGame extends Game {
         break;
     }
   }
+
+  void spawnDropper(){
+    //Find a saucer to spawn out of
+    //Find the y+x of saucer. Then spawn dropper a little below it
+    final listRandom = new Random();
+
+    var saucerToDrop = saucers[listRandom.nextInt(saucers.length)];
+    double x = saucerToDrop.saucerRect.left ;
+    double y = saucerToDrop.saucerRect.top;
+
+    //Dont spawn too close to the bunker
+    if (x < screenSize.height - tileSize * 2)
+    {
+      // Do nothing
+    }else {
+      droppers.add(DropperBlue(this, x, y));
+    }
+  }
+
+  void spawnDropperLanded(double x){
+
+  }
+
 
   void onTapDown(TapDownDetails d) {
     spawnMissile();

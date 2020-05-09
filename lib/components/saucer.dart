@@ -1,9 +1,9 @@
 import 'dart:ui';
-import 'package:gametest/box-game.dart';
+import 'package:gametest/bunker-game.dart';
 import 'package:flame/sprite.dart';
 
 class Saucer {
-  final BoxGame game;
+  final BunkerGame game;
   Rect saucerRect;
   bool isDead = false;
   bool isOffScreen = false;
@@ -14,6 +14,7 @@ class Saucer {
 
   //How fast are the saucers
   double get speed => game.tileSize *3;
+  double get dropRate => 1.0;
 
   Saucer(this.game) {}
 
@@ -29,8 +30,6 @@ class Saucer {
     // If saucer is dead - move it down
     if (isDead) {
       saucerRect = saucerRect.translate(0, game.tileSize * 6 * t);
-      print ("Sacuer score" + game.score.toString());
-
     } else
     {
       flyingSpriteIndex += 10 * t;

@@ -12,13 +12,13 @@
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
-import 'package:gametest/box-game.dart';
+import 'package:gametest/bunker-game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 
 void main() {
 
-  BoxGame game = BoxGame();
+  BunkerGame game = BunkerGame();
   runApp(game.widget);
 
   Util flameUtil = Util();
