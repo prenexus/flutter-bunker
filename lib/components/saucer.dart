@@ -7,7 +7,8 @@ class Saucer {
   late Rect saucerRect;
   bool isDead = false;
   bool isOffScreen = false;
-  late List<Sprite> flyingSprite;
+  //List<Sprite> flyingSprite
+  var flyingSprite = <Sprite>[];
   late Sprite deadSprite;
   double flyingSpriteIndex = 0;
   late Offset targetLocation;

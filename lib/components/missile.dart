@@ -8,7 +8,7 @@ class Missile {
   late Rect missileRect;
   bool isDead = false;
   bool isOffScreen = false;
-  late List<Sprite> flyingSprite;
+  var flyingSprite= <Sprite>[];
   late Sprite deadSprite;
   double flyingSpriteIndex = 0;
   late Offset targetLocation;
@@ -18,7 +18,7 @@ class Missile {
 
   Missile(this.game) {
     missileRect = Rect.fromLTWH(100, 300, game.tileSize *.1, game.tileSize*.1);
-    //flyingSprite = List<Sprite>();
+    flyingSprite = <Sprite>[];
     flyingSprite.add(Sprite('missile/missile.png'));
     flyingSprite.add(Sprite('missile/missile.png'));
     flyingSprite.add(Sprite('missile/missile.png'));

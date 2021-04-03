@@ -10,7 +10,7 @@ class DropperLanded  {
 
   DropperLanded(this.game, x, y) {
     dropperRect = Rect.fromLTWH(x, y, game.tileSize/2, game.tileSize/2);
-    //flyingSprite = List<Sprite>();
+    flyingSprite = <Sprite>[];
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));

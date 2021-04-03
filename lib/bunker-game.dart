@@ -37,10 +37,10 @@ class BunkerGame extends Game with PanDetector {
   late Bunker bunker;
   late Cactus cactus;
   late Skybox skybox;
-  late List<Saucer> saucers;
-  late List<Missile> missiles;
-  late List<Dropper> droppers;
-  late List<DropperLanded> droppersLanded;
+  var saucers = <Saucer>[];
+  var missiles =  <Missile>[];
+  var droppers = <Dropper>[];
+  var droppersLanded = <DropperLanded>[] ;
   late ScoreDisplay scoreDisplay;
   late HomeView homeView;
   late SaucerSpawner spawner;
@@ -66,10 +66,10 @@ class BunkerGame extends Game with PanDetector {
 
   void initialise() async {
     //saucers = List<Saucer>();
-    saucers = List<Saucer>.empty();
-    missiles = List<Missile>.empty();
-    droppers = List<Dropper>.empty();
-    droppersLanded = List<DropperLanded>.empty();
+    saucers = <Saucer>[];
+    missiles = <Missile>[];
+    droppers = <Dropper>[];
+    droppersLanded = <DropperLanded>[];
 
     resize(await Flame.util.initialDimensions());
     startButton = StartButton(this);
