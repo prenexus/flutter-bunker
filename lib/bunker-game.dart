@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:gametest/components/background.dart';
@@ -16,6 +17,8 @@ import 'package:gametest/components/saucer-red.dart';
 import 'package:gametest/components/dropper.dart';
 import 'package:gametest/components/score-display.dart';
 import 'package:gametest/components/missile.dart';
+
+import 'package:gametest/components/start-button.dart';
 
 import 'package:gametest/view.dart';
 import 'package:gametest/views/home-view.dart';
@@ -42,15 +45,18 @@ class BunkerGame extends Game with PanDetector {
   HomeView homeView;
   SaucerSpawner spawner;
   DropperSpawner dropperSpawner;
-  View activeView = View.playing;
+  StartButton startButton;
+
+  View activeView = View.home;
 
   double gunAngle = 45.0;
   int score = 0;
   //How many landers do we have?
   int landed = 0;
   // After maxLanders trigger a march to the bunker
-  int maxLanders = 10;
+  int maxLanders = 3;
   bool landersMarch = false;
+  bool gameOver = false;
 
   Random rnd;
 
@@ -65,6 +71,8 @@ class BunkerGame extends Game with PanDetector {
     droppersLanded = List<DropperLanded>();
 
     resize(await Flame.util.initialDimensions());
+    startButton = StartButton(this);
+
     rnd = Random();
 
     //Initialise all our classes
@@ -75,6 +83,7 @@ class BunkerGame extends Game with PanDetector {
     background = Background(this);
     bunker = Bunker(this);
     cactus = Cactus(this);
+
     homeView = HomeView(this);
   }
 
@@ -89,9 +98,23 @@ class BunkerGame extends Game with PanDetector {
     saucers.forEach((Saucer saucer) => saucer.render(canvas));
     droppers.forEach((Dropper dropper) => dropper.render(canvas));
     droppersLanded.forEach((DropperLanded dropperLanded) => dropperLanded.render(canvas));
+
+    if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.home || activeView == View.lost) {
+      startButton.render(canvas);
+    }
   }
 
   void update(double t) {
+
+    //Is it game over?
+    if (gameOver == true)
+      {
+
+        endGame();
+        return;
+      }
+
     missiles.forEach((Missile missile) => missile.update(t, gunAngle));
     saucers.forEach((Saucer saucer) => saucer.update(t));
     droppers.forEach((Dropper dropper) => dropper.update(t));
@@ -169,6 +192,12 @@ class BunkerGame extends Game with PanDetector {
   }
 
   void spawnDropper(){
+
+    // If we have more than maxLanders on the ground, dont spawn anymore droppers. When the landers get cleared, we should start dropping again
+    if (landersMarch){
+      return;
+    }
+
     //Find a saucer to spawn out of
     //Find the y+x of saucer. Then spawn dropper a little below it
     final listRandom = new Random();
@@ -177,7 +206,7 @@ class BunkerGame extends Game with PanDetector {
     double x = saucerToDrop.saucerRect.left ;
     double y = saucerToDrop.saucerRect.top;
 
-    //Dont spawn too close to the bunker, or off screen
+    //Don't spawn too close to the bunker, or off screen
       if ((x < tileSize * 4) || (x > screenSize.width - tileSize * 2))
     {
       // Do nothing
@@ -187,6 +216,10 @@ class BunkerGame extends Game with PanDetector {
   }
 
   void onTapDown(TapDownDetails d) {
+    if (activeView == View.home || activeView == View.lost) {
+      startButton.onTapDown();
+    }
+
     spawnMissile();
   }
 
@@ -205,7 +238,7 @@ class BunkerGame extends Game with PanDetector {
 
       if (d.delta.dx  > 2)
         {
-          print ("Switching to missle");
+          print ("Switching to missile");
         }
 
 
@@ -217,6 +250,11 @@ class BunkerGame extends Game with PanDetector {
     if (gunAngle < 0){
       gunAngle = 0.0;
     }
+  }
+
+  void endGame(){
+        // Display the end of game message and scoreboard?
+    
   }
 
 }

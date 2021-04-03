@@ -7,7 +7,6 @@ class DropperLanded  {
   final BunkerGame game;
   Rect dropperRect;
   double get speed => game.tileSize * 1.2;
-  final int maxLanders = 10;
 
   DropperLanded(this.game, x, y) {
     dropperRect = Rect.fromLTWH(x, y, game.tileSize/2, game.tileSize/2);
@@ -24,11 +23,26 @@ class DropperLanded  {
   Offset targetLocation;
 
   void render(Canvas c) {
-    flyingSprite[flyingSpriteIndex.toInt()].renderRect(
-        c, dropperRect.inflate(2));
+      flyingSprite[flyingSpriteIndex.toInt()].renderRect(
+          c, dropperRect.inflate(2));
   }
 
   void update(double t) {
+
+    if (game.landersMarch) {
+      // The maximum landers has been reached. March them to the bunker!
+      double stepDistance = (speed * t) / 2;
+      //Move them
+      Offset stepToTarget = Offset(-stepDistance,0);
+      dropperRect = dropperRect.shift(stepToTarget);
+    }
+
+    // Lander has reached the bunker - blow it up and Game Over
+    if (dropperRect.right < game.tileSize*3 )
+    {
+      game.gameOver = true;
+    }
+
 
     //Is the dropper off screen at the bottom?
     if (dropperRect.top > game.screenSize.width) {

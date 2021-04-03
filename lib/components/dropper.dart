@@ -39,7 +39,7 @@ class Dropper {
 
   void update(double t) {
     if (dropperRect.top > game.screenSize.height - game.tileSize *1.5 ) {
-      //      if (dropper.dropperRect.top >= this.screenSize.height - this.tileSize *1.5 ) {
+
       spawnDropperLanded(dropperRect.left);
       isOffScreen = true;
       return;
@@ -92,7 +92,13 @@ class Dropper {
       game.landed++;
       game.droppersLanded.add(DropperLanded(game, x, game.screenSize.height - game.tileSize*1.5));
 
-      if (game.landed == game.maxLanders) {game.landersMarch = true;}
+      // if there are more landers than allowed - start them marching on the bunker
+      if (game.landed > game.maxLanders)
+      {
+          game.landersMarch = true;
+      }else {
+          game.landersMarch = false;
+      }
   }
 
 }
