@@ -10,7 +10,7 @@ class DropperBlue extends Dropper {
   DropperBlue(BunkerGame game, double x, double y) : super(game) {
 
     dropperRect = Rect.fromLTWH(x,y, game.tileSize/2, game.tileSize/2);
-    flyingSprite = List<Sprite>();
+    //flyingSprite = List<Sprite>();
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));

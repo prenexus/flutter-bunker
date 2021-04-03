@@ -5,15 +5,15 @@ import 'package:flame/sprite.dart';
 
 class Dropper {
   final BunkerGame game;
-  Rect dropperRect;
+  late Rect dropperRect;
   bool isDead = false;
   bool isOffScreen = false;
   bool isParachuting = false;
   bool hasLanded = false;
-  List<Sprite> flyingSprite;
-  Sprite parachuteSprite;
+  late List<Sprite> flyingSprite;
+  late Sprite parachuteSprite;
   double flyingSpriteIndex = 0;
-  Offset targetLocation;
+  late Offset targetLocation;
 
   // Slightly slower than the saucers
   double get speed => game.tileSize *2;

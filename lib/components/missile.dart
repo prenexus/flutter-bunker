@@ -4,21 +4,21 @@ import 'package:gametest/bunker-game.dart';
 
 class Missile {
   final BunkerGame game;
-  Sprite bgSprite;
-  Rect missileRect;
+  late Sprite bgSprite;
+  late Rect missileRect;
   bool isDead = false;
   bool isOffScreen = false;
-  List<Sprite> flyingSprite;
-  Sprite deadSprite;
+  late List<Sprite> flyingSprite;
+  late Sprite deadSprite;
   double flyingSpriteIndex = 0;
-  Offset targetLocation;
+  late Offset targetLocation;
 
   //Missile speed
   double get speed => game.tileSize * 3;
 
   Missile(this.game) {
     missileRect = Rect.fromLTWH(100, 300, game.tileSize *.1, game.tileSize*.1);
-    flyingSprite = List<Sprite>();
+    //flyingSprite = List<Sprite>();
     flyingSprite.add(Sprite('missile/missile.png'));
     flyingSprite.add(Sprite('missile/missile.png'));
     flyingSprite.add(Sprite('missile/missile.png'));

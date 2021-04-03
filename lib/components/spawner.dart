@@ -9,8 +9,8 @@ class SaucerSpawner {
   final int intervalChange = 3;
   final int maxSaucersOnScreen = 3;
 
-  int currentInterval;
-  int nextSpawn;
+  late int currentInterval;
+  late int nextSpawn;
 
   SaucerSpawner(this.game) {
     start();

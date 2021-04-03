@@ -10,7 +10,7 @@ class SaucerBlue extends Saucer {
   SaucerBlue(BunkerGame game, double x, double y) : super(game) {
 
     saucerRect = Rect.fromLTWH(x,y, game.tileSize, game.tileSize);
-    flyingSprite = List<Sprite>();
+    //flyingSprite = List<Sprite>();
     flyingSprite.add(Sprite('saucer/saucer-blue.png'));
     flyingSprite.add(Sprite('saucer/saucer-blue-2.png'));
     flyingSprite.add(Sprite('saucer/saucer-blue-3.png'));

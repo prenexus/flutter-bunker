@@ -4,8 +4,8 @@ import 'package:gametest/bunker-game.dart';
 
 class Cactus {
   final BunkerGame game;
-  Sprite bgSprite;
-  Rect bgRect;
+  late Sprite bgSprite;
+  late Rect bgRect;
 
   Cactus(this.game) {
     bgSprite = Sprite('cactus/cactus.png');

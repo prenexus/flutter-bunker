@@ -4,9 +4,9 @@ import 'package:gametest/bunker-game.dart';
 
 class ScoreDisplay {
   final BunkerGame game;
-  TextPainter painter;
-  TextStyle textStyle;
-  Offset position;
+  late TextPainter painter;
+  late TextStyle textStyle;
+  late Offset position;
 
 
   ScoreDisplay(this.game) {
@@ -35,7 +35,9 @@ class ScoreDisplay {
 }
 
   void update(double t) {
-    if((painter.text?.text ?? '') != game.score.toString()) {
+    //Getter error - 3/4/21
+    //if((painter.text?.text ?? '') != game.score.toString()) {
+    if((painter.text ?? '') != game.score.toString()) {
       painter.text = TextSpan(
         text: "Score : " + game.score.toString(),
         style: textStyle,

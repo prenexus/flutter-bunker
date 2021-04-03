@@ -4,8 +4,8 @@ import 'package:gametest/bunker-game.dart';
 
 class Background {
   final BunkerGame game;
-  Sprite bgSprite;
-  Rect bgRect;
+  late Sprite bgSprite;
+  late Rect bgRect;
 
   Background(this.game) {
     bgSprite = Sprite('background/layer-2.png');

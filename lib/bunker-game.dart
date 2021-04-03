@@ -31,21 +31,21 @@ import 'package:gametest/components/dropper-landed.dart';
 import 'dart:math';
 
 class BunkerGame extends Game with PanDetector {
-  Size screenSize;
-  double tileSize;
-  Background background;
-  Bunker bunker;
-  Cactus cactus;
-  Skybox skybox;
-  List<Saucer> saucers;
-  List<Missile> missiles;
-  List<Dropper> droppers;
-  List<DropperLanded> droppersLanded;
-  ScoreDisplay scoreDisplay;
-  HomeView homeView;
-  SaucerSpawner spawner;
-  DropperSpawner dropperSpawner;
-  StartButton startButton;
+  late Size screenSize;
+  late double tileSize;
+  late Background background;
+  late Bunker bunker;
+  late Cactus cactus;
+  late Skybox skybox;
+  late List<Saucer> saucers;
+  late List<Missile> missiles;
+  late List<Dropper> droppers;
+  late List<DropperLanded> droppersLanded;
+  late ScoreDisplay scoreDisplay;
+  late HomeView homeView;
+  late SaucerSpawner spawner;
+  late DropperSpawner dropperSpawner;
+  late StartButton startButton;
 
   View activeView = View.home;
 
@@ -58,17 +58,18 @@ class BunkerGame extends Game with PanDetector {
   bool landersMarch = false;
   bool gameOver = false;
 
-  Random rnd;
+  late Random rnd;
 
   BunkerGame() {
     initialise();
   }
 
   void initialise() async {
-    saucers = List<Saucer>();
-    missiles = List<Missile>();
-    droppers = List<Dropper>();
-    droppersLanded = List<DropperLanded>();
+    //saucers = List<Saucer>();
+    saucers = List<Saucer>.empty();
+    missiles = List<Missile>.empty();
+    droppers = List<Dropper>.empty();
+    droppersLanded = List<DropperLanded>.empty();
 
     resize(await Flame.util.initialDimensions());
     startButton = StartButton(this);

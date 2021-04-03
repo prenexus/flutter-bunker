@@ -5,12 +5,12 @@ import 'dart:ui';
 class DropperLanded  {
 
   final BunkerGame game;
-  Rect dropperRect;
+  late Rect dropperRect;
   double get speed => game.tileSize * 1.2;
 
   DropperLanded(this.game, x, y) {
     dropperRect = Rect.fromLTWH(x, y, game.tileSize/2, game.tileSize/2);
-    flyingSprite = List<Sprite>();
+    //flyingSprite = List<Sprite>();
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
     flyingSprite.add(Sprite('dropper/dropper-blue.png'));
@@ -18,9 +18,9 @@ class DropperLanded  {
 
   bool isDead = false;
   bool isOffScreen = false;
-  List<Sprite> flyingSprite;
+  late List<Sprite> flyingSprite;
   double flyingSpriteIndex = 0;
-  Offset targetLocation;
+  late Offset targetLocation;
 
   void render(Canvas c) {
       flyingSprite[flyingSpriteIndex.toInt()].renderRect(

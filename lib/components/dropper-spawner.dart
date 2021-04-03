@@ -9,8 +9,8 @@ class DropperSpawner {
   final int intervalChange = 3;
   final int maxDroppersOnScreen = 1;
 
-  int currentInterval;
-  int nextSpawn;
+  late int currentInterval;
+  late int nextSpawn;
 
   DropperSpawner(this.game) {
     start();

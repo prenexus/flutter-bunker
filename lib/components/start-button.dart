@@ -5,8 +5,8 @@ import 'package:gametest/view.dart';
 
 class StartButton {
   final BunkerGame game;
-  Rect rect;
-  Sprite sprite;
+  late Rect rect;
+  late Sprite sprite;
 
   StartButton(this.game) {
     rect = Rect.fromLTWH(

@@ -4,13 +4,13 @@ import 'package:flame/sprite.dart';
 
 class Saucer {
   final BunkerGame game;
-  Rect saucerRect;
+  late Rect saucerRect;
   bool isDead = false;
   bool isOffScreen = false;
-  List<Sprite> flyingSprite;
-  Sprite deadSprite;
+  late List<Sprite> flyingSprite;
+  late Sprite deadSprite;
   double flyingSpriteIndex = 0;
-  Offset targetLocation;
+  late Offset targetLocation;
 
   //How fast are the saucers
   double get speed => game.tileSize *3;

@@ -4,8 +4,8 @@ import 'package:gametest/bunker-game.dart';
 
 class HomeView {
   final BunkerGame game;
-  Rect titleRect;
-  Sprite titleSprite;
+  late Rect titleRect;
+  late Sprite titleSprite;
 
   HomeView(this.game){
     titleRect = Rect.fromLTWH(
