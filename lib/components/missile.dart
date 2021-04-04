@@ -35,28 +35,29 @@ class Missile {
   }
 
   void update(double t, double gunAngle) {
-    if (isDead) {
-      // Explode!
+      // This is the old code for moving the missile.
+      if (isDead) {
+        // Explode!
 
-      // Remove missile
-      isOffScreen = true;
-    } else {
-      flyingSpriteIndex += 10 * t;
-      if (flyingSpriteIndex >= 3) {
-        flyingSpriteIndex -= 3;
+        // Remove missile
+        isOffScreen = true;
+      } else {
+        flyingSpriteIndex += 10 * t;
+        if (flyingSpriteIndex >= 3) {
+          flyingSpriteIndex -= 3;
+        }
+
+        //How fast should they move? Can override this per class
+        double stepDistance = speed * t;
+        //Move them
+        Offset stepToTarget;
+        // 0degrees = ~3. 90 degrees = ~1.8. Each degree = 0.0133333
+        double max = 3.0;
+        double radians = max - (gunAngle * 0.0133333);
+        stepToTarget = Offset.fromDirection(radians, stepDistance * -1);
+
+        missileRect = missileRect.shift(stepToTarget);
       }
-
-      //How fast should they move? Can override this per class
-      double stepDistance = speed * t;
-      //Move them
-      Offset stepToTarget;
-      // 0degrees = ~3. 90 degrees = ~1.8. Each degree = 0.0133333
-      double max = 3.0;
-      double radians = max - (gunAngle * 0.0133333);
-      stepToTarget = Offset.fromDirection(radians, stepDistance *-1);
-
-      missileRect = missileRect.shift(stepToTarget);
     }
-  }
 
 }

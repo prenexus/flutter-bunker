@@ -17,6 +17,7 @@ import 'package:gametest/components/saucer-red.dart';
 import 'package:gametest/components/dropper.dart';
 import 'package:gametest/components/score-display.dart';
 import 'package:gametest/components/missile.dart';
+import 'package:gametest/components/mortar.dart';
 
 import 'package:gametest/components/start-button.dart';
 
@@ -39,6 +40,7 @@ class BunkerGame extends Game with PanDetector {
   late Skybox skybox;
   var saucers = <Saucer>[];
   var missiles =  <Missile>[];
+  var mortars =  <Mortar>[];
   var droppers = <Dropper>[];
   var droppersLanded = <DropperLanded>[] ;
   late ScoreDisplay scoreDisplay;
@@ -47,6 +49,13 @@ class BunkerGame extends Game with PanDetector {
   late DropperSpawner dropperSpawner;
   late StartButton startButton;
 
+  // How many points is the saucer worth?
+  int scoreSaucer = 10;
+
+  // Is the missile selected? Else fire the mortar
+  bool isMissileSelected = true;
+
+  //Default view on launch
   View activeView = View.home;
 
   double gunAngle = 45.0;
@@ -68,6 +77,7 @@ class BunkerGame extends Game with PanDetector {
     //saucers = List<Saucer>();
     saucers = <Saucer>[];
     missiles = <Missile>[];
+    mortars = <Mortar>[];
     droppers = <Dropper>[];
     droppersLanded = <DropperLanded>[];
 
@@ -96,6 +106,7 @@ class BunkerGame extends Game with PanDetector {
     if (activeView == View.playing) scoreDisplay.render(canvas);
 
     missiles.forEach((Missile missile) => missile.render(canvas));
+    mortars.forEach((Mortar mortar) => mortar.render(canvas));
     saucers.forEach((Saucer saucer) => saucer.render(canvas));
     droppers.forEach((Dropper dropper) => dropper.render(canvas));
     droppersLanded.forEach((DropperLanded dropperLanded) => dropperLanded.render(canvas));
@@ -117,6 +128,7 @@ class BunkerGame extends Game with PanDetector {
       }
 
     missiles.forEach((Missile missile) => missile.update(t, gunAngle));
+    mortars.forEach((Mortar mortar) => mortar.update(t, gunAngle));
     saucers.forEach((Saucer saucer) => saucer.update(t));
     droppers.forEach((Dropper dropper) => dropper.update(t));
     droppersLanded.forEach((DropperLanded dropperLanded) => dropperLanded.update(t));
@@ -126,11 +138,17 @@ class BunkerGame extends Game with PanDetector {
 
     // Check if missile hit saucer?
     saucers.forEach((Saucer saucer) {
-
       missiles.forEach((Missile missile) {
         if (missile.missileRect.overlaps(saucer.saucerRect)) {
           missile.isDead = true;
-          if (!saucer.isDead){score = score + 10;}
+          if (!saucer.isDead){score = score + scoreSaucer;}
+          saucer.explode();
+        }
+      });
+      mortars.forEach((Mortar mortar) {
+        if (mortar.mortarRect.overlaps(saucer.saucerRect)) {
+          mortar.isDead = true;
+          if(!saucer.isDead){score = score + scoreSaucer;}
           saucer.explode();
         }
       });
@@ -144,11 +162,21 @@ class BunkerGame extends Game with PanDetector {
           dropper.explode();
         }
       });
+
+      mortars.forEach((Mortar mortar) {
+        if (mortar.mortarRect.overlaps(dropper.dropperRect)) {
+          mortar.isDead = true;
+          if (!dropper.isDead){score = score + 5;}
+          dropper.explode();
+        }
+      });
+
     });
 
     //Remove offscreen elements
     saucers.removeWhere((Saucer saucer) => saucer.isOffScreen);
     missiles.removeWhere((Missile missile) => missile.isOffScreen);
+    mortars.removeWhere((Mortar mortar) => mortar.isOffScreen);
     droppers.removeWhere((Dropper dropper) => dropper.isOffScreen);
 
     if (activeView == View.playing) scoreDisplay.update(t);
@@ -163,6 +191,12 @@ class BunkerGame extends Game with PanDetector {
   void spawnMissile(){
     missiles.add(Missile(this));
     if (score > 0){ score--;}
+  }
+
+  void spawnMortar(){
+    mortars.add(Mortar(this));
+    if (score > 0){ score--;}
+
   }
 
   void spawnSaucer(){
@@ -219,10 +253,16 @@ class BunkerGame extends Game with PanDetector {
   void onTapDown(TapDownDetails d) {
     if (activeView == View.home || activeView == View.lost) {
       startButton.onTapDown();
-    }
+    } else {
 
-    spawnMissile();
+      if (isMissileSelected){
+        spawnMissile();
+      }else{
+        spawnMortar();
+      }
+    }
   }
+
 
   void onDrag(DragDownDetails d){
   }
@@ -230,18 +270,8 @@ class BunkerGame extends Game with PanDetector {
   @override
   void onPanUpdate (DragUpdateDetails d){
 
-      print(d.delta.dx.toString());
-
-      if (d.delta.dx < -2)
-        {
-          print ("Switching to mortar");
-        }
-
-      if (d.delta.dx  > 2)
-        {
-          print ("Switching to missile");
-        }
-
+    if (d.delta.dx < -2) {isMissileSelected = false;}
+    if (d.delta.dx  > 2) {isMissileSelected = true;}
 
     gunAngle = gunAngle - (d.delta.dy );
     if (gunAngle > 90){
@@ -255,7 +285,6 @@ class BunkerGame extends Game with PanDetector {
 
   void endGame(){
         // Display the end of game message and scoreboard?
-    
   }
 
 }
